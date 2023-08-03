@@ -10,10 +10,10 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import relationship
 from typing import Any, Dict
 
-from app.core.db import Base
+from app.core.config import Base
 
 
-class BaseModel(Base):
+class JsonMixin:
     def to_json(self) -> Dict[str, Any]:
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
@@ -34,13 +34,13 @@ followers = Table(
 )
 
 
-class User(BaseModel):
+class User(Base, JsonMixin):
     __tablename__: str = "users"
 
     id = Column(Integer, primary_key=True, index=True, unique=True)
-    name = Column(String, index=True)
+    name = Column(String)
     api_key = Column(String, index=True, unique=True)
-    password = Column(String, index=True)
+    password = Column(String)
 
     following = relationship(
         "User",
@@ -68,7 +68,7 @@ class User(BaseModel):
         return f"Пользователь {self.name}"
 
 
-class Tweet(BaseModel):
+class Tweet(Base, JsonMixin):
     __tablename__ = "tweets"
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
@@ -95,7 +95,7 @@ class Tweet(BaseModel):
         return f"Твит {self.tweet_data}"
 
 
-class Media(BaseModel):
+class Media(Base, JsonMixin):
     __tablename__ = "medias"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
@@ -106,7 +106,7 @@ class Media(BaseModel):
         return f"Медиа {self.name}"
 
 
-class Like(BaseModel):
+class Like(Base, JsonMixin):
     __tablename__ = "likes"
     __table_args__ = (
         UniqueConstraint(
