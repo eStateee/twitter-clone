@@ -10,7 +10,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import relationship
 from typing import Any, Dict
 
-from app.core.config import Base
+from core.config import Base
 
 
 class JsonMixin:
