@@ -19,8 +19,8 @@ router = APIRouter(prefix="/users", tags=["Users"])
 )
 async def follow_to_user(
         response: Response,
-        id: int,
-        api_key: str = Header(default="test"),
+        id: int = Header(description='ID пользователя которого надо отслеживать'),
+        api_key: str = Header(description='Текущий пользователь'),
         session: AsyncSession = Depends(get_session),
 ) -> Union[ResultSchema, ErrorSchema]:
     try:
@@ -40,8 +40,8 @@ async def follow_to_user(
 )
 async def delete_follow_to_user(
         response: Response,
-        id: int,
-        api_key: str = Header(default="test"),
+        id: int = Header(description='ID пользователя которого надо перестать отслеживать'),
+        api_key: str = Header(default="test",description="Текущий пользователь"),
         session: AsyncSession = Depends(get_session),
 ) -> Union[ResultSchema, ErrorSchema]:
     try:
@@ -63,7 +63,7 @@ async def delete_follow_to_user(
 )
 async def get_current_user(
         response: Response,
-        api_key: str = Header(),
+        api_key: str = Header(description='api-key пользователя'),
         session: AsyncSession = Depends(get_session),
 ) -> Union[UserResultOutSchema, ErrorSchema]:
     try:
@@ -81,7 +81,7 @@ async def get_current_user(
     status_code=200,
 )
 async def get_user_by_id(
-        response: Response, id: int, session: AsyncSession = Depends(get_session)
+        response: Response, id: int = Header(description='ID пользователя'), session: AsyncSession = Depends(get_session)
 ) -> Union[UserResultOutSchema, ErrorSchema]:
     try:
         return await get_user(session=session, user_id=id)

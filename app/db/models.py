@@ -7,10 +7,10 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, declarative_base
 from typing import Any, Dict
 
-from core.config import Base
+Base = declarative_base()
 
 
 class JsonMixin:

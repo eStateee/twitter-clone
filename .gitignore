@@ -69,10 +69,12 @@ instance/
 #Postgres
 db_dev/
 
+# Media
+app/media_files/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
+# Sphinx docume ntation
 docs/_build/
 
 # PyBuilder

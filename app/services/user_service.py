@@ -19,8 +19,8 @@ async def add_follow_to_user(
             error_type="BAD FOLLOW", error_message="User can't follow himself"
         )
 
-    q = await session.execute(select(User).where(User.id == user_id))
-    user_followed = q.scalars().one_or_none()
+    response = await session.execute(select(User).where(User.id == user_id))
+    user_followed = response.scalars().one_or_none()
     if not user_followed:
         raise BackendException(
             error_type="NO USER",
@@ -46,13 +46,13 @@ async def delete_follow_from_user(
     following_user = await get_user_by_api_key(
         session=session, api_key=api_key
     )
-    q = await session.execute(
+    response = await session.execute(
         select(followers).where(
             followers.c.following_user_id == following_user.id,
             followers.c.followed_user_id == user_id,
         )
     )
-    follower = q.scalars().one_or_none()
+    follower = response.scalars().one_or_none()
     if not follower:
         raise BackendException(
             error_type="BAD FOLLOW DELETE", error_message="No such follow"
@@ -70,27 +70,27 @@ async def delete_follow_from_user(
 async def get_user_me(session: AsyncSession, api_key: str):
     user = await get_user_by_api_key(session=session, api_key=api_key)
 
-    q = await session.execute(
+    response = await session.execute(
         select(User)
         .options(selectinload(User.following))
         .options(selectinload(User.followers))
         .where(User.api_key == api_key)
     )
 
-    user = q.scalars().one_or_none()
+    user = response.scalars().one_or_none()
 
     return {"result": True, "user": user}
 
 
 async def get_user(session: AsyncSession, user_id: int):
-    q = await session.execute(
+    response = await session.execute(
         select(User)
         .options(selectinload(User.following))
         .options(selectinload(User.followers))
         .where(User.id == user_id)
     )
 
-    user = q.scalars().one_or_none()
+    user = response.scalars().one_or_none()
     if not user:
         raise BackendException(
             error_type="NO USER", error_message="No user with such id"
