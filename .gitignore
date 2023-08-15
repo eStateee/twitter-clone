@@ -66,10 +66,15 @@ db.sqlite3-journal
 instance/
 .webassets-cache
 
+#Postgres
+db_dev/
+
+# Media
+app/media_files/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
+# Sphinx docume ntation
 docs/_build/
 
 # PyBuilder
