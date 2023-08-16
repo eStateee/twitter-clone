@@ -83,9 +83,7 @@ async def delete_tweet(session: AsyncSession, api_key: str, tweet_id: int):
     await session.execute(
         delete(Tweet).where(Tweet.id == tweet_id, Tweet.user_id == user.id)
     )
-    await session.execute(
-        delete(Media.where(Media.tweet_id == tweet_id))
-    )
+
     await session.commit()
 
 
