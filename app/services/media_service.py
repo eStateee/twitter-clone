@@ -14,6 +14,4 @@ async def post_image(session: AsyncSession, image_name: str) -> dict:
 
 def check_file(file):
     if file.content_type not in ("image/jpeg", "image/png"):
-        raise BackendException(
-            error_type="BAD FILE", error_message="Bad file type"
-        )
+        raise BackendException(error_type="BAD FILE", error_message="Bad file type")

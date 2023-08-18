@@ -11,7 +11,7 @@ from db.schemas import (
     TweetListOutSchema,
     TweetSchema,
     ErrorSchema,
-    ResultSchema
+    ResultSchema,
 )
 from services.tweet_service import (
     delete_like_to_tweet,
@@ -34,7 +34,7 @@ router = APIRouter(prefix="/tweets", tags=["Tweets"])
     status_code=200,
 )
 async def get_tweet_handler(
-        response: Response, id: int, session: AsyncSession = Depends(get_session)
+    response: Response, id: int, session: AsyncSession = Depends(get_session)
 ) -> Union[TweetSchema, ErrorSchema]:
     try:
         result = await get_tweet(session=session, tweet_id=id)
@@ -53,9 +53,9 @@ async def get_tweet_handler(
     status_code=200,
 )
 async def get_user_tweets_handler(
-        response: Response,
-        api_key: str = Header(default="test"),
-        session: AsyncSession = Depends(get_session),
+    response: Response,
+    api_key: str = Header(default="test"),
+    session: AsyncSession = Depends(get_session),
 ) -> Union[TweetListOutSchema, ErrorSchema]:
     try:
         result = await get_tweets(session=session, api_key=api_key)
@@ -74,10 +74,10 @@ async def get_user_tweets_handler(
     status_code=200,
 )
 async def post_tweet_handler(
-        response: Response,
-        tweet: TweetIn,
-        api_key: str = Header(default="test"),
-        session: AsyncSession = Depends(get_session),
+    response: Response,
+    tweet: TweetIn,
+    api_key: str = Header(default="test"),
+    session: AsyncSession = Depends(get_session),
 ) -> Union[BaseAnsTweet, ErrorSchema]:
     try:
         new_tweet_id = await post_tweet(
@@ -104,10 +104,10 @@ async def post_tweet_handler(
     status_code=200,
 )
 async def delete_tweet_handler(
-        response: Response,
-        id: int,
-        api_key: str = Header(default="test"),
-        session: AsyncSession = Depends(get_session),
+    response: Response,
+    id: int,
+    api_key: str = Header(default="test"),
+    session: AsyncSession = Depends(get_session),
 ) -> Union[ResultSchema, ErrorSchema]:
     try:
         await delete_tweet(session=session, api_key=api_key, tweet_id=id)
@@ -125,10 +125,10 @@ async def delete_tweet_handler(
     status_code=200,
 )
 async def add_like_to_tweet_handler(
-        response: Response,
-        id: int,
-        api_key: str = Header(default="test"),
-        session: AsyncSession = Depends(get_session),
+    response: Response,
+    id: int,
+    api_key: str = Header(default="test"),
+    session: AsyncSession = Depends(get_session),
 ) -> Union[ResultSchema, ErrorSchema]:
     try:
         await post_like_to_tweet(session=session, api_key=api_key, tweet_id=id)
@@ -146,15 +146,13 @@ async def add_like_to_tweet_handler(
     status_code=200,
 )
 async def delete_like_to_tweet_handler(
-        response: Response,
-        id: int,
-        api_key: str = Header(default="test"),
-        session: AsyncSession = Depends(get_session),
+    response: Response,
+    id: int,
+    api_key: str = Header(default="test"),
+    session: AsyncSession = Depends(get_session),
 ) -> Union[ResultSchema, ErrorSchema]:
     try:
-        await delete_like_to_tweet(
-            session=session, api_key=api_key, tweet_id=id
-        )
+        await delete_like_to_tweet(session=session, api_key=api_key, tweet_id=id)
         return {"result": True}
     except BackendException as e:
         response.status_code = 404

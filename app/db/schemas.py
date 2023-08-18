@@ -1,4 +1,3 @@
-
 from typing import List, Optional
 from pydantic import BaseModel, Field, validator
 from pydantic.schema import Sequence
@@ -15,7 +14,6 @@ class ErrorSchema(BaseModel):
 
 
 class ResultSchema(BaseModel):
-
     result: bool
 
 
@@ -69,13 +67,15 @@ class UserResultOutSchema(BaseModel):
     class Config:
         orm_mode = True
 
-class MediaOutSchema(BaseModel):
 
+class MediaOutSchema(BaseModel):
     result: bool = True
     media_id: int
 
     class Config:
         orm_mode = True
+
+
 class TweetIn(BaseModel):
     tweet_data: str
     tweet_media_ids: Optional[List[int]]
@@ -107,6 +107,5 @@ class TweetSchema(BaseModel):
 
 
 class TweetListOutSchema(BaseModel):
-
     result: bool = True
     tweets: Optional[List[TweetSchema]]
