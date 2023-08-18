@@ -109,9 +109,7 @@ class Media(Base, JsonMixin):
 class Like(Base, JsonMixin):
     __tablename__ = "likes"
     __table_args__ = (
-        UniqueConstraint(
-            "user_id", "tweet_id", name="_unique_who_tweet_likes"
-        ),
+        UniqueConstraint("user_id", "tweet_id", name="_unique_who_tweet_likes"),
     )
 
     id = Column(Integer, primary_key=True, index=True)

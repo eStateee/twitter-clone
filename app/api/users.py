@@ -5,7 +5,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from core.exceptions import BackendException
 from db.schemas import ResultSchema, ErrorSchema, UserIn, UserOut, UserResultOutSchema
 from dependencies import get_session
-from services.user_service import add_follow_to_user, get_user_me, delete_follow_from_user, get_user, post_user
+from services.user_service import (
+    add_follow_to_user,
+    get_user_me,
+    delete_follow_from_user,
+    get_user,
+    post_user,
+)
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -18,10 +24,10 @@ router = APIRouter(prefix="/users", tags=["Users"])
     status_code=200,
 )
 async def follow_to_user(
-        response: Response,
-        id: int = Header(description='ID пользователя которого надо отслеживать'),
-        api_key: str = Header(description='Текущий пользователь'),
-        session: AsyncSession = Depends(get_session),
+    response: Response,
+    id: int = Header(description="ID пользователя которого надо отслеживать"),
+    api_key: str = Header(description="Текущий пользователь"),
+    session: AsyncSession = Depends(get_session),
 ) -> Union[ResultSchema, ErrorSchema]:
     try:
         await add_follow_to_user(session=session, api_key=api_key, user_id=id)
@@ -39,15 +45,13 @@ async def follow_to_user(
     status_code=200,
 )
 async def delete_follow_to_user(
-        response: Response,
-        id: int = Header(description='ID пользователя которого надо перестать отслеживать'),
-        api_key: str = Header(default="test",description="Текущий пользователь"),
-        session: AsyncSession = Depends(get_session),
+    response: Response,
+    id: int = Header(description="ID пользователя которого надо перестать отслеживать"),
+    api_key: str = Header(default="test", description="Текущий пользователь"),
+    session: AsyncSession = Depends(get_session),
 ) -> Union[ResultSchema, ErrorSchema]:
     try:
-        await delete_follow_from_user(
-            session=session, api_key=api_key, user_id=id
-        )
+        await delete_follow_from_user(session=session, api_key=api_key, user_id=id)
         return {"result": True}
     except BackendException as e:
         response.status_code = 404
@@ -62,9 +66,9 @@ async def delete_follow_to_user(
     status_code=200,
 )
 async def get_current_user(
-        response: Response,
-        api_key: str = Header(description='api-key пользователя'),
-        session: AsyncSession = Depends(get_session),
+    response: Response,
+    api_key: str = Header(description="api-key пользователя"),
+    session: AsyncSession = Depends(get_session),
 ) -> Union[UserResultOutSchema, ErrorSchema]:
     try:
         return await get_user_me(session=session, api_key=api_key)
@@ -81,7 +85,9 @@ async def get_current_user(
     status_code=200,
 )
 async def get_user_by_id(
-        response: Response, id: int = Header(description='ID пользователя'), session: AsyncSession = Depends(get_session)
+    response: Response,
+    id: int = Header(description="ID пользователя"),
+    session: AsyncSession = Depends(get_session),
 ) -> Union[UserResultOutSchema, ErrorSchema]:
     try:
         return await get_user(session=session, user_id=id)
@@ -97,6 +103,6 @@ async def get_user_by_id(
     response_model=UserOut,
 )
 async def create_new_user(
-        user: UserIn, session: AsyncSession = Depends(get_session)
+    user: UserIn, session: AsyncSession = Depends(get_session)
 ) -> UserOut:
     return await post_user(session=session, user=user)

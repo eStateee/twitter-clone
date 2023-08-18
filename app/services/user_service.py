@@ -8,12 +8,8 @@ from db.models import followers, User
 from dependencies import get_user_by_api_key
 
 
-async def add_follow_to_user(
-        session: AsyncSession, api_key: str, user_id: int
-):
-    following_user = await get_user_by_api_key(
-        session=session, api_key=api_key
-    )
+async def add_follow_to_user(session: AsyncSession, api_key: str, user_id: int):
+    following_user = await get_user_by_api_key(session=session, api_key=api_key)
     if following_user.id == user_id:
         raise BackendException(
             error_type="BAD FOLLOW", error_message="User can't follow himself"
@@ -40,12 +36,8 @@ async def add_follow_to_user(
     await session.commit()
 
 
-async def delete_follow_from_user(
-        session: AsyncSession, api_key: str, user_id: int
-):
-    following_user = await get_user_by_api_key(
-        session=session, api_key=api_key
-    )
+async def delete_follow_from_user(session: AsyncSession, api_key: str, user_id: int):
+    following_user = await get_user_by_api_key(session=session, api_key=api_key)
     response = await session.execute(
         select(followers).where(
             followers.c.following_user_id == following_user.id,

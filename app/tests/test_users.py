@@ -12,12 +12,8 @@ async def test_get_user_by_id(ac: AsyncClient, insert_data):
 
 async def test_post_follow_to_user(ac: AsyncClient, insert_data):
     response = await ac.post("api/users/2/follow", headers={"api-key": "oleg"})
-    response_2 = await ac.post(
-        "api/users/2/follow", headers={"api-key": "111"}
-    )
-    response_3 = await ac.post(
-        "api/users/4/follow", headers={"api-key": "oleg"}
-    )
+    response_2 = await ac.post("api/users/2/follow", headers={"api-key": "111"})
+    response_3 = await ac.post("api/users/4/follow", headers={"api-key": "oleg"})
     assert response.status_code == 200
     assert response.json()["result"] is True
     assert response_2.status_code == 404
@@ -25,15 +21,9 @@ async def test_post_follow_to_user(ac: AsyncClient, insert_data):
 
 
 async def test_delete_follow_to_user(ac: AsyncClient, insert_data):
-    response = await ac.delete(
-        "api/users/2/follow", headers={"api-key": "oleg"}
-    )
-    response_2 = await ac.delete(
-        "api/users/2/follow", headers={"api-key": "oleg"}
-    )
-    response_3 = await ac.delete(
-        "api/users/4/follow", headers={"api-key": "oleg"}
-    )
+    response = await ac.delete("api/users/2/follow", headers={"api-key": "oleg"})
+    response_2 = await ac.delete("api/users/2/follow", headers={"api-key": "oleg"})
+    response_3 = await ac.delete("api/users/4/follow", headers={"api-key": "oleg"})
     assert response.status_code == 200
     assert response.json()["result"] is True
     assert response_2.status_code == 404

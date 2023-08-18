@@ -33,12 +33,8 @@ async def test_post_tweets(ac: AsyncClient, insert_data):
 
 async def test_post_like_to_tweet(ac: AsyncClient, insert_data):
     response = await ac.post("api/tweets/1/likes", headers={"api-key": "oleg"})
-    response_2 = await ac.post(
-        "api/tweets/1/likes", headers={"api-key": "oleg"}
-    )
-    response_3 = await ac.post(
-        "api/tweets/3/likes", headers={"api-key": "oleg"}
-    )
+    response_2 = await ac.post("api/tweets/1/likes", headers={"api-key": "oleg"})
+    response_3 = await ac.post("api/tweets/3/likes", headers={"api-key": "oleg"})
     assert response.status_code == 200
     assert response.json()["result"] is True
     assert response_2.status_code == 404
@@ -46,15 +42,9 @@ async def test_post_like_to_tweet(ac: AsyncClient, insert_data):
 
 
 async def test_delete_like_to_tweet(ac: AsyncClient, insert_data):
-    response = await ac.delete(
-        "api/tweets/1/likes", headers={"api-key": "oleg"}
-    )
-    response_2 = await ac.delete(
-        "api/tweets/1/likes", headers={"api-key": "oleg"}
-    )
-    response_3 = await ac.delete(
-        "api/tweets/3/likes", headers={"api-key": "oleg"}
-    )
+    response = await ac.delete("api/tweets/1/likes", headers={"api-key": "oleg"})
+    response_2 = await ac.delete("api/tweets/1/likes", headers={"api-key": "oleg"})
+    response_3 = await ac.delete("api/tweets/3/likes", headers={"api-key": "oleg"})
     assert response.status_code == 200
     assert response.json()["result"] is True
     assert response_2.status_code == 404

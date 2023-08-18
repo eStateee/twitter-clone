@@ -7,6 +7,7 @@ from db.models import Like, Media, Tweet, User
 from core.exceptions import BackendException
 from dependencies import get_user_by_api_key
 
+
 async def get_tweet(session: AsyncSession, tweet_id: int):
     response = await session.execute(
         select(Tweet)
@@ -39,9 +40,7 @@ async def get_tweets(session: AsyncSession, api_key: str):
     return {"result": True, "tweets": tweets}
 
 
-async def post_tweet(
-        session: AsyncSession, api_key: str, tweet_data: str
-) -> int:
+async def post_tweet(session: AsyncSession, api_key: str, tweet_data: str) -> int:
     user = await get_user_by_api_key(session=session, api_key=api_key)
 
     insert_tweet_query = await session.execute(
@@ -57,7 +56,7 @@ async def post_tweet(
 
 
 async def insert_media_to_tweet(
-        session: AsyncSession, tweet_id: int, tweet_medias: list
+    session: AsyncSession, tweet_id: int, tweet_medias: list
 ):
     for media_id in tweet_medias:
         await session.execute(
@@ -70,9 +69,7 @@ async def delete_tweet(session: AsyncSession, api_key: str, tweet_id: int):
     user = await get_user_by_api_key(session=session, api_key=api_key)
     await get_tweet(session=session, tweet_id=tweet_id)
 
-    user_id = await session.execute(
-        select(Tweet.user_id).where(Tweet.id == tweet_id)
-    )
+    user_id = await session.execute(select(Tweet.user_id).where(Tweet.id == tweet_id))
     author_id = user_id.scalars().one_or_none()
     if author_id != user.id:
         raise BackendException(
@@ -87,9 +84,7 @@ async def delete_tweet(session: AsyncSession, api_key: str, tweet_id: int):
     await session.commit()
 
 
-async def post_like_to_tweet(
-        session: AsyncSession, api_key: str, tweet_id: int
-):
+async def post_like_to_tweet(session: AsyncSession, api_key: str, tweet_id: int):
     user = await get_user_by_api_key(session=session, api_key=api_key)
     await get_tweet(session=session, tweet_id=tweet_id)
 
@@ -110,15 +105,11 @@ async def post_like_to_tweet(
     return new_like_id
 
 
-async def delete_like_to_tweet(
-        session: AsyncSession, api_key: str, tweet_id: int
-):
+async def delete_like_to_tweet(session: AsyncSession, api_key: str, tweet_id: int):
     user = await get_user_by_api_key(session=session, api_key=api_key)
     tweet = await get_tweet(session=session, tweet_id=tweet_id)
     response = await session.execute(
-        select(Like)
-        .where(Like.user_id == user.id)
-        .where(Like.tweet_id == tweet.id)
+        select(Like).where(Like.user_id == user.id).where(Like.tweet_id == tweet.id)
     )
     like = response.scalars().one_or_none()
     if not like:
