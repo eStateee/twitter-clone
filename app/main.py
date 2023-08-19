@@ -23,7 +23,7 @@ app.add_middleware(
 
 @app.get("/api/test")
 def test_api():
-    return {"result": 'True'}
+    return {"result": "True"}
 
 
 @app.on_event("shutdown")

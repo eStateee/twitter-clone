@@ -1,4 +1,3 @@
-
 from typing import Union
 
 import aiofiles
@@ -14,7 +13,6 @@ from core.config import MEDIA_PATH, OUT_PATH
 router = APIRouter(prefix="/medias", tags=["Medias"])
 
 
-
 @router.post(
     "/",
     summary="Загрузка изображений для твита",
@@ -23,10 +21,10 @@ router = APIRouter(prefix="/medias", tags=["Medias"])
     status_code=200,
 )
 async def post_image_handler(
-        response: Response,
-        file: UploadFile,
-        api_key: str = Header(),
-        session: AsyncSession = Depends(get_session),
+    response: Response,
+    file: UploadFile,
+    api_key: str = Header(),
+    session: AsyncSession = Depends(get_session),
 ) -> Union[MediaOutSchema, ErrorSchema]:
     try:
         check_file(file)
