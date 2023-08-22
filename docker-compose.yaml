@@ -29,6 +29,26 @@ services:
     depends_on:
       - db
 
+  prometheus:
+    image: prom/prometheus:v2.2.1
+    volumes:
+      - ./prometheus/config.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    networks:
+      - custom
+    depends_on:
+      - web
+
+
+  grafana:
+    image: grafana/grafana:5.1.0
+    ports:
+      - 3000:3000
+    networks:
+      - custom
+    depends_on:
+      - prometheus
 
   db:
     container_name: "db"

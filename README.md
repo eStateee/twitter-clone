@@ -10,6 +10,8 @@
 - Swagger
 - docker-compose
 - GitHub Workflow
+- Prometheus
+- Grafana
 Корпоративная копия Twitter с возможностью выкладывать посты, лайкать их, подписываться на других пользователей
 
 ## Для развертки проекта:
@@ -23,6 +25,21 @@ git clone <this repo>
 ```
 docker-compose up --build
 ```
+
+### [Просмотр метрик](http://127.0.0.1:3000)
+```
+admin admin
+```
+```
+Prometheus
+http://prometheus:9090
+```
+```angular2html
+Можно импортировать готовый дешборд из директории grafana/dashboards/dashboard.json
+```
+
+
+
 
 База данных и миграции создаются автоматически
 
