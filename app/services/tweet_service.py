@@ -1,4 +1,4 @@
-from sqlalchemy import delete, insert, select, update
+from sqlalchemy import delete, insert, select, update, func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -44,11 +44,15 @@ The get_tweets function returns all tweets for a given user.
     await get_user_by_api_key(session=session, api_key=api_key)
 
     response = await session.execute(
-        select(Tweet)
+        select(Tweet, func.count(Like.id).label('like_count'))
         .options(selectinload(Tweet.author))
         .options(selectinload(Tweet.likes).options(selectinload(Like.user)))
         .options(selectinload(Tweet.media))
-        .where(Tweet.author.has(User.api_key == api_key))
+        .join(User, User.id == Tweet.user_id)
+        .outerjoin(Like, Like.tweet_id == Tweet.id)
+        .where(User.api_key == api_key)
+        .group_by(Tweet.id)
+        .order_by(func.count(Like.id).desc())
     )
 
     tweets = response.scalars().all()
